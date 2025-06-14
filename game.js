@@ -5,6 +5,36 @@ const GRAVITY = 0.5;
 const JUMP_FORCE = -12;
 const MOVE_SPEED = 5;
 
+// Canvas scaling for mobile responsiveness
+let canvasScale = 1;
+let canvasOffsetX = 0;
+let canvasOffsetY = 0;
+
+function resizeCanvas() {
+    const container = document.getElementById('gameContainer');
+    const containerRect = container.getBoundingClientRect();
+    
+    // Calculate scale to fit the container while maintaining aspect ratio
+    const scaleX = containerRect.width / 800;
+    const scaleY = containerRect.height / 600;
+    canvasScale = Math.min(scaleX, scaleY);
+    
+    // Set canvas size
+    canvas.style.width = (800 * canvasScale) + 'px';
+    canvas.style.height = (600 * canvasScale) + 'px';
+    
+    // Calculate offsets for centering
+    canvasOffsetX = (containerRect.width - (800 * canvasScale)) / 2;
+    canvasOffsetY = (containerRect.height - (600 * canvasScale)) / 2;
+    
+    canvas.style.left = canvasOffsetX + 'px';
+    canvas.style.top = canvasOffsetY + 'px';
+}
+
+// Initial resize and listen for window resize
+resizeCanvas();
+window.addEventListener('resize', resizeCanvas);
+
 class Particle {
     constructor(x, y, vx, vy, color, size, lifetime) {
         this.x = x;
@@ -358,6 +388,7 @@ class Game {
     }
 
     setupInput() {
+        // Keyboard controls
         window.addEventListener('keydown', (e) => {
             this.keys[e.key] = true;
             
@@ -377,6 +408,125 @@ class Game {
         window.addEventListener('keyup', (e) => {
             this.keys[e.key] = false;
         });
+
+        // Mobile touch controls
+        this.setupMobileControls();
+    }
+
+    setupMobileControls() {
+        const leftBtn = document.getElementById('leftBtn');
+        const rightBtn = document.getElementById('rightBtn');
+        const jumpBtn = document.getElementById('jumpBtn');
+        const recordBtn = document.getElementById('recordBtn');
+        const clearBtn = document.getElementById('clearBtn');
+
+        // Left button
+        leftBtn.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            this.keys['ArrowLeft'] = true;
+        });
+        leftBtn.addEventListener('touchend', (e) => {
+            e.preventDefault();
+            this.keys['ArrowLeft'] = false;
+        });
+        leftBtn.addEventListener('mousedown', (e) => {
+            e.preventDefault();
+            this.keys['ArrowLeft'] = true;
+        });
+        leftBtn.addEventListener('mouseup', (e) => {
+            e.preventDefault();
+            this.keys['ArrowLeft'] = false;
+        });
+
+        // Right button
+        rightBtn.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            this.keys['ArrowRight'] = true;
+        });
+        rightBtn.addEventListener('touchend', (e) => {
+            e.preventDefault();
+            this.keys['ArrowRight'] = false;
+        });
+        rightBtn.addEventListener('mousedown', (e) => {
+            e.preventDefault();
+            this.keys['ArrowRight'] = true;
+        });
+        rightBtn.addEventListener('mouseup', (e) => {
+            e.preventDefault();
+            this.keys['ArrowRight'] = false;
+        });
+
+        // Jump button
+        jumpBtn.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            this.keys[' '] = true;
+        });
+        jumpBtn.addEventListener('touchend', (e) => {
+            e.preventDefault();
+            this.keys[' '] = false;
+        });
+        jumpBtn.addEventListener('mousedown', (e) => {
+            e.preventDefault();
+            this.keys[' '] = true;
+        });
+        jumpBtn.addEventListener('mouseup', (e) => {
+            e.preventDefault();
+            this.keys[' '] = false;
+        });
+
+        // Record button
+        recordBtn.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            if (!this.isRecording && this.echoesUsed < this.maxEchoes) {
+                this.startRecording();
+            } else if (this.isRecording) {
+                this.stopRecording();
+            }
+        });
+        recordBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            if (!this.isRecording && this.echoesUsed < this.maxEchoes) {
+                this.startRecording();
+            } else if (this.isRecording) {
+                this.stopRecording();
+            }
+        });
+
+        // Clear button
+        clearBtn.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            this.clearEchoes();
+        });
+        clearBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            this.clearEchoes();
+        });
+
+        // Prevent context menu on mobile
+        document.addEventListener('contextmenu', (e) => {
+            if (e.target.classList.contains('mobile-btn')) {
+                e.preventDefault();
+            }
+        });
+
+        // Prevent scrolling when touching game area
+        document.body.addEventListener('touchstart', (e) => {
+            if (e.target.tagName === 'CANVAS' || e.target.classList.contains('mobile-btn')) {
+                e.preventDefault();
+            }
+        }, { passive: false });
+
+        document.body.addEventListener('touchend', (e) => {
+            if (e.target.tagName === 'CANVAS' || e.target.classList.contains('mobile-btn')) {
+                e.preventDefault();
+            }
+        }, { passive: false });
+
+        document.body.addEventListener('touchmove', (e) => {
+            if (e.target.tagName === 'CANVAS' || e.target.classList.contains('mobile-btn')) {
+                e.preventDefault();
+            }
+        }, { passive: false });
     }
 
     startRecording() {
