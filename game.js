@@ -523,3 +523,9 @@ class Game {
 }
 
 window.game = new Game();
+
+// Welcome popup functionality
+function closeWelcomePopup() {
+    const popup = document.getElementById('welcomePopup');
+    popup.classList.add('hidden');
+}
