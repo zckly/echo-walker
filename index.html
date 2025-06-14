@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Echo Walker</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap');
+        
+        body {
+            margin: 0;
+            padding: 0;
+            background: radial-gradient(ellipse at center, #0f1420 0%, #0a0e1a 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            font-family: 'Orbitron', monospace;
+        }
+        #gameContainer {
+            position: relative;
+            filter: drop-shadow(0 0 30px rgba(0, 255, 136, 0.3));
+        }
+        canvas {
+            border: 2px solid transparent;
+            background: linear-gradient(45deg, #00ff88, #00ccff) border-box;
+            border-radius: 4px;
+            position: relative;
+        }
+        #ui {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            color: #00ff88;
+            font-size: 20px;
+            font-weight: 700;
+            text-shadow: 0 0 10px rgba(0, 255, 136, 0.5);
+        }
+        #echoCount {
+            color: #00ccff;
+            font-size: 24px;
+        }
+        #controls {
+            position: absolute;
+            bottom: -60px;
+            left: 0;
+            right: 0;
+            text-align: center;
+            color: #888;
+            font-size: 12px;
+            font-weight: 400;
+            letter-spacing: 1px;
+        }
+        #controls span {
+            color: #00ff88;
+            font-weight: 700;
+        }
+        #title {
+            position: absolute;
+            top: -60px;
+            left: 0;
+            right: 0;
+            text-align: center;
+            color: #00ff88;
+            font-size: 36px;
+            font-weight: 900;
+            text-shadow: 0 0 20px rgba(0, 255, 136, 0.5);
+            letter-spacing: 4px;
+        }
+    </style>
+</head>
+<body>
+    <div id="gameContainer">
+        <div id="title">ECHO WALKER</div>
+        <canvas id="gameCanvas" width="800" height="600"></canvas>
+        <div id="ui">
+            <div>ECHOES: <span id="echoCount">3</span></div>
+        </div>
+        <div id="controls">
+            <span>←→</span> Move | <span>SPACE</span> Jump | <span>R</span> Record Echo | <span>E</span> Clear Echoes
+        </div>
+    </div>
+    <script src="game.js"></script>
+</body>
+</html>
